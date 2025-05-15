@@ -1,15 +1,17 @@
 
-
+import React from 'react'
+import HomePage from './pages/homepage/HomePage';
 export default function Home() {
   return (
-    <div  className='container mx-auto'>
-      <h1>THis is news paper</h1>
+    <div  className=' min-h-screen'>
+
      
+     <HomePage/>
  
     </div>
   );
 }
-import React from 'react'
+
 
 
 

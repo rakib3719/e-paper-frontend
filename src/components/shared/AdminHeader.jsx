@@ -19,7 +19,7 @@ export default function AdminHeader() {
 
 
   const navItems = [
-    { name: 'সকল সংবাদ', path: '/' },
+    { name: 'সকল সংবাদ', path: '/admin/all-news' },
     { name: 'নতুন সংবাদ যুক্ত করুন', path: '/admin/add-news' },
     { name: 'সকল ইউজার', path: '/all-users' },
 
