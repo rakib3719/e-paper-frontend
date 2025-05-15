@@ -8,8 +8,28 @@ import { LuPrinter } from "react-icons/lu";
 import { FaDownload, FaFacebook, FaTwitter } from 'react-icons/fa';
 import { IoClose, IoLogoWhatsapp } from 'react-icons/io5';
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from 'next/navigation';
 export default function HomePage() {
-  const { data, loading, error } = useGetNews();
+
+
+const searchParams = useSearchParams();
+const page = searchParams.get('page');
+const divison = searchParams.get('divison')
+console.log(page, 'page number is here')
+
+let url = '/news';
+if(page){
+  url = `/news/?page=${page}`
+}
+if(divison){
+  url = `/news/?divison=${divison}`
+}
+
+console.log(divison, 'division is here')
+
+
+
+  const { data, loading, error } = useGetNews(url, page, divison);
   const [selectedImage, setSelectedImage] = useState(null);
 
   if (loading) return <h1 className="text-center mt-10">Loading...</h1>;
@@ -36,7 +56,7 @@ export default function HomePage() {
           delay: 0.4
         }
       }
-    };
+    }
 
 
     const handleAllPrint = ()=>{

@@ -110,6 +110,9 @@ const onSubmit = async (data) => {
 
 
 
+
+
+
   
   return (
     <div className='max-w-2xl mx-auto p-6 bg-white my-24 border border-gray-400 rounded-md mt-8'>
@@ -209,7 +212,53 @@ const onSubmit = async (data) => {
   {errors.category && <span className='text-red-800'>This field is required</span>}
 </div>
 
+{/* page dropdown */}
+<div>
+  <label htmlFor='page' className='block font-medium text-gray-700 mb-1'>পাতা  নির্বাচন করুন</label>
+  <select
+    id='page'
+    {...register('page', { required: true })}
+    className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400'
+  >
+    <option value=''>-- পাতা নির্বাচন করুন --</option>
+    <option value='1'>প্রথম পাতা</option>
+    <option value='2'>খবর</option>
+    <option value='3'>সম্পাদকীয় ও মন্তব্য</option>
+    <option value='4'>মুক্তমঞ্চ</option>
+    <option value='5'>লোকালয়</option>
+    <option value='6'>নন্দন</option>
+    <option value='7'>শিল্প বাণিজ্য</option>
+    <option value='8'>খেলাধুলা</option>
+    <option value='9'>আন্তজাতিক</option>
+    <option value='10'>শেষের পাতা</option>
+  </select>
 
+</div>
+
+  {errors.category && <span className='text-red-800'>This field is required</span>}
+
+
+
+  {/* division */}
+
+
+  <div>
+  <label htmlFor='division' className='block font-medium text-gray-700 mb-1'>ডিভিশন নির্বাচন করুন</label>
+  <select
+    id='division'
+    {...register('divison', { required: true })}
+    className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400'
+  >
+    <option value=''>-- ডিভিশন নির্বাচন করুন --</option>
+    <option value='nagar-editon'>নগর</option>
+    <option value='dhaka-editon'>ঢাকা বিভাগ</option>
+    <option value='southern-editon'>দক্ষিণাঞ্চল</option>
+    <option value='northern-editon'>উত্তরাঞ্চল</option>
+    <option value='syhlet-editon'>সিলেট</option>
+    <option value='ctg-editon'>চট্রগ্রাম</option>
+  </select>
+  {errors.category && <span className='text-red-800'>This field is required</span>}
+</div>
         {/* Submit Button */}
         <div className='text-right'>
           <button

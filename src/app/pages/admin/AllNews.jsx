@@ -25,6 +25,7 @@ export default function AllNews() {
   const { data, loading, error, refetch } = useGetNews(); 
   const router = useRouter();
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [currentItem, setCurrentItem] = useState({})
 
   const  [updateLoading, setLoading] = useState(false)
 
@@ -40,7 +41,7 @@ export default function AllNews() {
 
 
 
-  
+  console.log(currentItem, 'Current Items---')
 
 const onSubmit = async (data) => {
   setLoading(true);
@@ -272,7 +273,18 @@ const onSubmit = async (data) => {
               <Button
                 size="small"
                 variant="outlined"
-             onClick={() => setModalIsOpen(true)}
+             onClick={() => {
+              
+              
+              setModalIsOpen(true) 
+
+                  setCurrentItem(newsItem)
+             }
+            
+            
+
+
+             }
               >
                  Edit
               </Button>
@@ -319,12 +331,15 @@ const onSubmit = async (data) => {
 
        <form  onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
 
+        <h4    onClick={() => setModalIsOpen(false)} className='text-right cursor-pointer'>Close</h4>
+
         {/* Title */}
         <div>
           <label htmlFor='title' className='block font-medium text-gray-700 mb-1'>শিরোনাম</label>
           <input
             type='text'
             id='title'
+            defaultValue={currentItem?.title}
             
           
        
@@ -340,6 +355,7 @@ const onSubmit = async (data) => {
             type='date'
             id='date'
             name='date'
+            defaultValue={currentItem?.date}
           
           
         {...register("date" , {required:true} )}
@@ -357,13 +373,14 @@ const onSubmit = async (data) => {
             id='note'
        
             rows='4'
+            defaultValue={currentItem?.note}
           
               {...register("note")}
             className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400'
           ></textarea>
         </div>
 
-        {/* Image Upload */}
+      
         <div>
           <label htmlFor='image' className='block font-medium text-gray-700 mb-1'>ছবি আপলোড</label>
           <input
@@ -378,7 +395,7 @@ const onSubmit = async (data) => {
         </div>
          {errors.img && <span className='text-red-800'>This field is required</span>}
 
-        {/* PDF Upload */}
+    
         <div>
           <label htmlFor='pdf' className='block font-medium text-gray-700 mb-1'>PDF আপলোড </label>
           <input
