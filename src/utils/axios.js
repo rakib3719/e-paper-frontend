@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  // baseURL: "https://mfs-server-side.vercel.app/api",
+  // baseURL: "https://e-paper-backend.vercel.app/api",
   baseURL: "http://localhost:5000/api",
-  // withCredentials: true, 
+  withCredentials: true, 
 });
 
 // Request interceptor

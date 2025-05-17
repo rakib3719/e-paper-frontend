@@ -9,36 +9,104 @@ import { FaDownload, FaFacebook, FaTwitter } from 'react-icons/fa';
 import { IoClose, IoLogoWhatsapp } from 'react-icons/io5';
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from 'next/navigation';
+
 export default function HomePage() {
 
 
 const searchParams = useSearchParams();
 const page = searchParams.get('page');
 const divison = searchParams.get('divison')
+const date = searchParams.get('date')
+const category = searchParams.get('category')
+
 console.log(page, 'page number is here')
 
-let url = '/news';
-if(page){
-  url = `/news/?page=${page}`
+
+
+const downLoadImage = async () => {
+  const imageUrl = selectedImage || data?.data[0]?.image;
+
+  if (!imageUrl) {
+    console.error("No image URL found");
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.href = imageUrl;
+  link.download = "downloaded-image.jpg";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+const downLoadPdf = async () => {
+  const imageUrl = selectedPdf || data?.data[0]?.pdf;
+
+  if (!imageUrl) {
+    console.error("No PDF URL found");
+    return;
+  }
+
+  const link = document.createElement("a");
+  link.href = imageUrl;
+  link.download = "downloaded-image.jpg";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
+const today = new Date().toISOString().split('T')[0];
+const queryDate = date || today;
+
+
+const queryParams = new URLSearchParams();
+if (page) queryParams.set('page', page);
+if (divison) queryParams.set('divison', divison);
+if (queryDate) queryParams.set('date', queryDate);
+if (category) queryParams.set('category', category);
+
+
+
+
+let url = `/news?${queryParams.toString()}`;
+
+if(category){
+
+  url = `/news?${queryParams.toString()}&&category${category}`
+
 }
-if(divison){
-  url = `/news/?divison=${divison}`
+
+
+
+
+  const { data, loading, error } = useGetNews(url, page, divison,date, category);
+  
+  const [selectedImage, setSelectedImage] = useState(data?.data[0]?.image);
+  const [selectedPdf, setSelectedPdf] = useState(data?.data[0]?.pdf || null);
+     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+
+if(loading){
+  return <p>Loading...</p>
 }
 
-console.log(divison, 'division is here')
+if(error){
+  return <p>Loading...</p>
+}
+
+if(!data){
+  return <p>No Data Found!!!</p>
+}
 
 
-
-  const { data, loading, error } = useGetNews(url, page, divison);
-  const [selectedImage, setSelectedImage] = useState(null);
 
   if (loading) return <h1 className="text-center mt-10">Loading...</h1>;
   if (error) return <h1 className="text-center mt-10 text-red-600">Something went wrong!</h1>;
 
   const newsImages = data?.data?.filter(item => item?.image);
-  const defaultImage = data?.data[0].image;
+  const defaultImage = data?.data[0]?.image;
 
-   const [modalIsOpen, setModalIsOpen] = useState(false);
+
     const overlayVariants = {
       visible: {
         opacity: 1,
@@ -64,7 +132,7 @@ console.log(divison, 'division is here')
     }
 
     const handlePrint = () => {
-  if (!selectedImage) return;
+
 
   const printWindow = window.open('', '_blank');
   if (printWindow) {
@@ -89,7 +157,7 @@ console.log(divison, 'division is here')
           </style>
         </head>
         <body>
-          <img src="${selectedImage}" alt="Printed Image" />
+          <img src="${selectedImage || data?.data[0]?.image}" alt="Printed Image" />
           <script>
             window.onload = function() {
               window.print();
@@ -123,7 +191,7 @@ console.log(divison, 'division is here')
 <span>  Print</span>
 </button>
 
-<button href={selectedImage}  className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button   className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <FaDownload   />
@@ -148,7 +216,17 @@ console.log(divison, 'division is here')
               <div
                 key={idx}
                 className="relative break-inside-avoid overflow-hidden rounded-md shadow-sm border border-gray-300 group cursor-pointer"
-                onClick={() => setSelectedImage(item.image)}
+                onClick={() => {setSelectedImage(item.image)
+                   setSelectedPdf(item?.pdf || null);
+                   const isMobile = window.innerWidth  <= 768;
+                   if(isMobile){
+                         setModalIsOpen(true)
+                   }
+
+             
+                  }
+                  
+                  }
               >
                 <Image
                   alt="News"
@@ -179,7 +257,7 @@ console.log(divison, 'division is here')
 
 
 
-  <div className='flex bg-[#d9d9d9] p-2 '>
+  <div className='md:flex hidden bg-[#d9d9d9] p-2 '>
     <div className='w-full  flex gap-3'>
 <button             onClick={() => setModalIsOpen(true)} className='bg-[#505050] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
@@ -195,14 +273,14 @@ console.log(divison, 'division is here')
 <span>  Print</span>
 </button>
 
-<button href={selectedImage}  className='bg-[#505050] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button onClick={downLoadImage}  className='bg-[#505050] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <FaDownload   />
 <span>  Image</span>
 </button>
 
-<button className='bg-[#505050] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button onClick={downLoadPdf} className='bg-[#505050] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <FaDownload   />
@@ -227,7 +305,7 @@ console.log(divison, 'division is here')
 
 
 
-        <div className="flex-1 p-6 flex justify-center items-center ">
+        <div className="flex-1 hidden  p-6 md:flex justify-center items-center ">
 
 
 
@@ -271,7 +349,7 @@ console.log(divison, 'division is here')
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-white rounded-md shadow-lg w-full max-w-[60vw] max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-md shadow-lg w-full md:max-w-[60vw] max-h-[90vh] overflow-scroll"
       >
         {/* Modal Top Bar */}
         <div className="flex justify-between items-center bg-[#d9d9d9] p-2 sticky top-0 z-10">
@@ -281,12 +359,12 @@ console.log(divison, 'division is here')
               <span>Full view</span>
             </button> */}
 
-            <button className="bg-[#505050] py-1 px-2 rounded flex items-center gap-1 text-white">
+            <button onClick={downLoadImage} className="bg-[#505050] cursor-pointer py-1 px-2 rounded flex items-center gap-1 text-white">
               <FaDownload />
               <span>Image</span>
             </button>
 
-            <button className="bg-[#505050] py-1 px-2 rounded flex items-center gap-1 text-white">
+            <button onClick={downLoadPdf} className="bg-[#505050] py-1 px-2 rounded flex items-center gap-1 text-white">
               <FaDownload />
               <span>PDF</span>
             </button>
@@ -312,7 +390,7 @@ console.log(divison, 'division is here')
         <div className="overflow-auto p-4 h-[calc(90vh-60px)] flex justify-center items-center">
           <Image
             alt="modal img"
-            src={selectedImage}
+            src={selectedImage ||data?.data[0]?.image }
             width={1000}
             height={1000}
             className="max-w-full max-h-full object-contain rounded"

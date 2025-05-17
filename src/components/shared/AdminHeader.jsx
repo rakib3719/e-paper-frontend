@@ -7,16 +7,40 @@ import SocialIcon from './SocialIcon';
 import { Drawer } from '@mui/material';
 import Link from 'next/link';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import AdminSubHeader from './AdminSubHeader';
 
 export default function AdminHeader() {
   const [open, setOpen] = useState(false);
 
+
+
+  const router = useRouter();
+const pathname = usePathname();
+const isAdmin = pathname.includes('/admin')
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
 
+  const convertDateToBangla = (dateStr) => {
+  const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  const months = [
+    'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+    'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+  ];
+
+  const date = new Date(dateStr);
+  const day = date.getDate().toString().split('').map(d => banglaDigits[d]).join('');
+  const month = months[date.getMonth()];
+  const year = date.getFullYear().toString().split('').map(d => banglaDigits[d]).join('');
+
+  return `${day}ই ${month}, ${year} খ্রিস্টাব্দ`;
+};
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // default to today
+  });
 
   const navItems = [
     { name: 'সকল সংবাদ', path: '/admin/all-news' },
@@ -24,6 +48,13 @@ export default function AdminHeader() {
     { name: 'সকল ইউজার', path: '/all-users' },
 
   ];
+
+
+    const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setSelectedDate(newDate);
+isAdmin ?     router.push(`admin/all-news/?date=${newDate}`) :     router.push(`/?date=${newDate}`);
+  };
 
   // const pathname = usePathname();
   // if(pathname?.includes('/admin')){
@@ -33,23 +64,38 @@ export default function AdminHeader() {
   return (
 <div>
       <div className='border-b border-gray-800 py-2'>
-      <div className='flex items-center justify-between container mx-auto'>
+      <div className='md:flex items-center justify-between container mx-auto'>
 
-        <div onClick={toggleDrawer(true)} className='cursor-pointer'>
+       <div className='flex items-center gap-3'>
+         <div onClick={toggleDrawer(true)} className='cursor-pointer'>
           <IoMenuSharp className='text-5xl' />
         </div>
 
-        {/* 📅 Date */}
-        <div>
-          <p>১৪ই মে, ২০২৫ খ্রিস্টাব্দ</p>
-        </div>
+         <div>
+  <p
+    onClick={() => document.getElementById('datePicker').showPicker()}
+    className="cursor-pointer text-md font-semibold"
+  >
+    {convertDateToBangla(selectedDate)}
+  </p>
+
+  <input
+    type="date"
+    id="datePicker"
+    value={selectedDate}
+    onChange={handleDateChange}
+    className="opacity-0 absolute pointer-events-none"
+  />
+</div>
+
 
         <div>
           <Image alt='logo' src={logo} height={200} width={200} />
         </div>
+       </div>
 
      
-        <div>
+        <div className='my-3 flex justify-center'>
           <SocialIcon />
         </div>
       </div>
@@ -92,7 +138,7 @@ export default function AdminHeader() {
 
 
    <div className='border-gray-400 border-b '>
-     <AdminSubHeader/>
+  
    </div>
 </div>
   );

@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { Suspense } from 'react'
+import AllNews from '../pages/admin/AllNews'
 
 export default function page() {
   return (
     <div className='min-h-screen'>
 
-<h1>THis is admin dashboard</h1>
+     <Suspense fallback={<div className="text-center mt-10">Loading News...</div>}>
+  <AllNews/>
+    </Suspense>
+     
 
     </div>
   )

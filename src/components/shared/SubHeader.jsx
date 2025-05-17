@@ -1,27 +1,43 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, Suspense } from 'react';
 import { TiArrowSortedDown } from "react-icons/ti";
-export default function SubHeader() {
+
+const SubHeaderContent = () => {
   const router = useRouter();
-  const [curretnPage, setCurrentPage] = useState('প্রথম পাতা');
-  const[currentDivison, setCurretnDivision] = useState('নগর সংস্করণ')
+  const [currentPage, setCurrentPage] = useState('প্রথম পাতা');
+  const [currentDivision, setCurrentDivision] = useState('নগর সংস্করণ');
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const goToPage = (pageNumber, pageName) => {
+    const today = new Date().toISOString().split('T')[0];
+    const selected = searchParams.get('date') || today;
+    const isAdmin = pathname.includes('/admin');
 
-    router.push(`/?page=${pageNumber}`);
-    setCurrentPage(pageName)
+    const newQuery = new URLSearchParams();
+    newQuery.set('page', pageNumber);
+    newQuery.set('date', selected);
+    isAdmin ? router.push(`/admin/all-news/?${newQuery.toString()}`) : router.push(`/?${newQuery.toString()}`);
+    setCurrentPage(pageName);
   };
 
-  const goToDivision = (divisionName, pageName)=>{
-    router.push(`/?divison=${divisionName}`)
-    setCurretnDivision(pageName)
-  }
+  const goToDivision = (divisionName, divisionLabel) => {
+    const today = new Date().toISOString().split('T')[0];
+    const selected = searchParams.get('date') || today;
+    const isAdmin = pathname.includes('/admin');
+
+    const newQuery = new URLSearchParams();
+    newQuery.set('divison', divisionName);
+    newQuery.set('date', selected);
+    isAdmin ? router.push(`/admin/all-news/?${newQuery.toString()}`) : router.push(`/?${newQuery.toString()}`);
+    setCurrentDivision(divisionLabel);
+  };
 
   const navItems = [
     { name: 'হোম', path: '/' },
     {
-      name: curretnPage,
+      name: currentPage,
       path: '1',
       pageDropDown: [
         { name: 'প্রথম পাতা', path: '1' },
@@ -37,7 +53,7 @@ export default function SubHeader() {
       ],
     },
     {
-      name: currentDivison,
+      name: currentDivision,
       path: '/nagar-editon',
       divisionDropDown: [
         { name: 'নগর', path: 'nagar-editon' },
@@ -48,27 +64,42 @@ export default function SubHeader() {
         { name: 'চট্রগ্রাম', path: 'ctg-editon' },
       ],
     },
-    { name: 'খেলা ', path: '/sports' },
-    { name: 'সারাদেশ ', path: '/bd' },
-    { name: 'বিনোদন ', path: '/entertaiment' },
+    { name: 'খেলা', path: '/sports' },
+    { name: 'সারাদেশ', path: '/bd' },
+    { name: 'বিনোদন', path: '/entertaiment' },
     { name: 'চাকরি', path: '/jobs' },
     { name: 'আইন-আদালত', path: '/law' },
   ];
 
+  const isAdmin = pathname.includes('admin');
+
   return (
-    <div className="container mx-auto">
-      <div className="flex items-center gap-4 py-4">
+    <div className={`${!isAdmin ? 'container hidden md:block mx-auto' : 'container mx-auto'}`}>
+      <div className="md:flex space-y-2 px-2 md:px-0 md:space-y-0 items-center gap-4 py-4">
         {navItems.map((item, idx) => (
           <div
             key={idx}
             className="flex-1 relative group text-gray-800 cursor-pointer hover:text-red-600 transition"
+            onClick={() => {
+              if (item.name === 'হোম') {
+                router.push('/');
+                return;
+              }
+
+              if (!item.pageDropDown && !item.divisionDropDown && item.name) {
+                const today = new Date().toISOString().split('T')[0];
+                const selected = searchParams.get('date') || today;
+                const isAdmin = pathname.includes('/admin');
+                const newQuery = new URLSearchParams();
+                newQuery.set('category', item.name.trim());
+                newQuery.set('date', selected);
+                isAdmin ? router.push(`/admin/all-news/?${newQuery.toString()}`) : router.push(`/?${newQuery.toString()}`);
+              }
+            }}
           >
             <div className="flex items-center gap-2">
               <p>{item.name}</p>
-              {item.pageDropDown && <span>
-                
-                <TiArrowSortedDown />
-                </span>}
+              {(item.pageDropDown || item.divisionDropDown) && <span><TiArrowSortedDown /></span>}
             </div>
 
             {item.pageDropDown && (
@@ -76,7 +107,10 @@ export default function SubHeader() {
                 {item.pageDropDown.map((dropItem, dropIdx) => (
                   <div
                     key={dropIdx}
-                    onClick={() => {goToPage(dropItem.path, dropItem.name)} }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToPage(dropItem.path, dropItem.name);
+                    }}
                     className="text-gray-800 cursor-pointer hover:text-red-600 transition"
                   >
                     <p>{dropItem.name}</p>
@@ -84,12 +118,16 @@ export default function SubHeader() {
                 ))}
               </div>
             )}
+
             {item.divisionDropDown && (
               <div className="absolute left-0 hidden group-hover:block p-4 z-50 bg-white shadow-lg space-y-2">
                 {item.divisionDropDown.map((dropItem, dropIdx) => (
                   <div
                     key={dropIdx}
-                    onClick={() => goToDivision(dropItem.path, dropItem.name)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToDivision(dropItem.path, dropItem.name);
+                    }}
                     className="text-gray-800 cursor-pointer hover:text-red-600 transition"
                   >
                     <p>{dropItem.name}</p>
@@ -101,5 +139,21 @@ export default function SubHeader() {
         ))}
       </div>
     </div>
+  );
+};
+
+export default function SubHeader() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto">
+        <div className="md:flex space-y-2 px-2 md:px-0 md:space-y-0 items-center gap-4 py-4">
+          {[...Array(8)].map((_, idx) => (
+            <div key={idx} className="flex-1 h-6 bg-gray-200 animate-pulse rounded"></div>
+          ))}
+        </div>
+      </div>
+    }>
+      <SubHeaderContent />
+    </Suspense>
   );
 }

@@ -1,16 +1,24 @@
+'use client'
 import React from 'react'
 
 import logo from '@/asset/images/logo.webp';
 import Image from 'next/image';
 import SocialIcon from './SocialIcon';
+import { usePathname } from 'next/navigation';
 
 
 export default function Footer() {
+	const pathname = usePathname();
+
+
+	if(pathname.includes('/login')){
+		return null;
+	}
   return (
     <div>
 
 
-      <footer className="px-4 divide-y bg-[#eff5f4]">
+      <footer className="px-4 mt-16 divide-y bg-[#eff5f4]">
 	<div className="container  flex flex-col justify-between py-18 mx-auto space-y-8 lg:flex-row lg:space-y-0">
 		<div className="lg:w-1/3">
 		

@@ -7,9 +7,9 @@ export default function AdminSubHeader() {
     { name: 'নতুন সংবাদ যুক্ত করুন', path: '/add-news' },
     { name: 'সকল ইউজার', path: '/all-users' },
 
-  ];
+  ]
   return (
-    <div className='container mx-auto'>
+    <div className=''>
 
 
 
