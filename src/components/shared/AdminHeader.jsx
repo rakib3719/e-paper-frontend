@@ -53,7 +53,7 @@ const isAdmin = pathname.includes('/admin')
     const handleDateChange = (e) => {
     const newDate = e.target.value;
     setSelectedDate(newDate);
-isAdmin ?     router.push(`admin/all-news/?date=${newDate}`) :     router.push(`/?date=${newDate}`);
+    router.push(`/admin/?date=${newDate}`);
   };
 
   // const pathname = usePathname();
