@@ -1,0 +1,19 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@10.9.2
+2 info using node@v22.15.0
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\project\e-paper\e-paper\e-paper\.npmrc
+5 silly config load:file:C:\Users\rakib\.npmrc
+6 silly config load:file:C:\Users\rakib\.npm-global\etc\npmrc
+7 verbose title npm config set prefix C:UsersmynameAppDataRoamingnpm
+8 verbose argv "config" "set" "prefix" "C:UsersmynameAppDataRoamingnpm"
+9 verbose logfile logs-max:10 dir:C:\project\e-paper\e-paper\e-paper\UsersmynameAppDataRoamingnpm-cache\_logs\2025-05-18T07_21_17_932Z-
+10 verbose logfile C:\project\e-paper\e-paper\e-paper\UsersmynameAppDataRoamingnpm-cache\_logs\2025-05-18T07_21_17_932Z-debug-0.log
+11 silly logfile done cleaning log files
+12 info config set "prefix" "C:UsersmynameAppDataRoamingnpm"
+13 verbose cwd C:\project\e-paper\e-paper\e-paper
+14 verbose os Windows_NT 10.0.26100
+15 verbose node v22.15.0
+16 verbose npm  v10.9.2
+17 verbose exit 0
+18 info ok
