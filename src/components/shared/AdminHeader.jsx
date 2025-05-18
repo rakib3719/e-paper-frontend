@@ -34,7 +34,7 @@ const isAdmin = pathname.includes('/admin')
   const month = months[date.getMonth()];
   const year = date.getFullYear().toString().split('').map(d => banglaDigits[d]).join('');
 
-  return `${day}ই ${month}, ${year} খ্রিস্টাব্দ`;
+  return `${day}ই ${month}, ${year} `;
 };
 
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -64,9 +64,9 @@ const isAdmin = pathname.includes('/admin')
   return (
 <div>
       <div className='border-b border-gray-800 py-2'>
-      <div className='md:flex items-center justify-between container mx-auto'>
+      <div className='md:flex items-center justify-between px-3 md:px-8'>
 
-       <div className='flex items-center gap-3'>
+       <div className='flex items-center justify-between  gap-3'>
          <div onClick={toggleDrawer(true)} className='cursor-pointer'>
           <IoMenuSharp className='text-5xl' />
         </div>
@@ -89,7 +89,7 @@ const isAdmin = pathname.includes('/admin')
 </div>
 
 
-        <div>
+        <div className=''>
           <Image alt='logo' src={logo} height={200} width={200} />
         </div>
        </div>
@@ -111,7 +111,7 @@ const isAdmin = pathname.includes('/admin')
         </div>
            <button 
   onClick={toggleDrawer(false)} 
-  className='text-gray-700 cursor-pointer transition-transform duration-500 hover:rotate-90 hover:text-black'
+  className='text-gray-700 cursor-pointer  transition-transform duration-500 hover:rotate-90 hover:text-black'
 >
   <IoCloseSharp className='text-3xl' />
 </button>
@@ -143,3 +143,5 @@ const isAdmin = pathname.includes('/admin')
 </div>
   );
 }
+
+

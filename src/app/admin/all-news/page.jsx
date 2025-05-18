@@ -2,7 +2,9 @@ import React, { Suspense } from 'react'
 import AllNews from '../../pages/admin/AllNews'
 
 
+
 export default function page() {
+
   return (
     <div className=' mt-8 '>
       

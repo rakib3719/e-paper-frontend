@@ -184,21 +184,21 @@ if(!data){
    <div className='w-full  flex gap-3'>
 
 
-<button onClick={handleAllPrint} className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button onClick={handlePrint} className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <LuPrinter  />
 <span>  Print</span>
 </button>
 
-<button   className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button onClick={downLoadImage}  className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <FaDownload   />
 <span>  Image</span>
 </button>
 
-<button className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
+<button onClick={downLoadPdf}  className='bg-[#c99f5d] py-1 px-2 rounded flex items-center gap-1  cursor-pointer text-white'>
 
 
   <FaDownload   />
@@ -210,7 +210,7 @@ if(!data){
 </div>
             </div>
         {newsImages?.length > 0 ? (
-          <div className="columns-1 px-6 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          <div className="columns-1 md:px-6 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             
             {newsImages.map((item, idx) => (
               <div
@@ -294,7 +294,7 @@ if(!data){
 
 
 <div className='flex gap-3 items-center'>
-  <span className='font-semibold'>Share-</span>
+  <span className='font-semibold ml-2'>Share-</span>
 
 
   <FaFacebook className='text-blue-600'/>

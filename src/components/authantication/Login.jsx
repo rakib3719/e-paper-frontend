@@ -21,6 +21,8 @@ import { SignInPage } from '@toolpad/core/SignInPage';
 import { useTheme } from '@mui/material/styles';
 import axiosInstance from '@/utils/axios';
 import Swal from 'sweetalert2';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 
 const providers = [{ id: 'credentials', name: 'Email and Password' }];
 
@@ -159,6 +161,7 @@ function RememberMeCheckbox() {
 
 export default function Login() {
   const theme = useTheme();
+    const router = useRouter();
   return (
     <AppProvider theme={theme}>
       <SignInPage
@@ -176,17 +179,35 @@ try {
 
     const resp = await axiosInstance.post('/user/login', {email, password});
   console.log(resp?.data?.message, 'login-///')
-  Swal.fire(resp?.data?.message);
+
 
   const token = resp?.data?.token;
-  console.log(token)
+
+  const role = resp?.data?.user?.role;
+
+
+ const res = await signIn("credentials", {
+     token,
+     role,
+      redirect: false,
+    });
+
+
+    console.log(res, 'login')
+
+    if(res.status === 200){
+  Swal.fire('Login sucessfully');
+
+  router.push('/admin')
+    }
+
 
 
 
 
   
 } catch (error) {
-  console.log(error.response.data.message)
+  console.log(error)
    Swal.fire({
   icon: "error",
   title: "Oops...",

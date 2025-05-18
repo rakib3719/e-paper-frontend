@@ -1,5 +1,7 @@
 import AdminHeader from "@/components/shared/AdminHeader";
 import SubHeader from "@/components/shared/SubHeader";
+import AuthProvider from "../providers/AuthProvider";
+
 
 
 
@@ -11,17 +13,20 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
 
       <div
         className={'bg-white dark:bg-white'}
       >
 
-   <AdminHeader/>
+<AuthProvider>
+     <AdminHeader/>
  
         <div className="mt-16 ">
           {children}
         </div>
+</AuthProvider>
       </div>
 
   );

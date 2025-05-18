@@ -20,7 +20,7 @@ const convertDateToBangla = (dateStr) => {
   const day = date.getDate().toString().split('').map(d => banglaDigits[d]).join('');
   const month = months[date.getMonth()];
   const year = date.getFullYear().toString().split('').map(d => banglaDigits[d]).join('');
-  return `${day}ই ${month}, ${year} খ্রিস্টাব্দ`;
+  return `${day}ই ${month}, ${year} `;
 };
 
 const HeaderContent = () => {
@@ -118,7 +118,7 @@ const HeaderContent = () => {
   return (
     <div>
       <div className='border-b border-gray-800 py-2'>
-        <div className='md:flex items-center justify-between container mx-auto'>
+        <div className='md:flex items-center justify-between px-8 mx-auto'>
           <div className='flex items-center gap-4'>
             <div onClick={toggleDrawer} className='cursor-pointer'>
               <IoMenuSharp className='text-5xl' />
