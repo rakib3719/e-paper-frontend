@@ -45,7 +45,8 @@ const isAdmin = pathname.includes('/admin')
   const navItems = [
     { name: 'সকল সংবাদ', path: '/admin/all-news' },
     { name: 'নতুন সংবাদ যুক্ত করুন', path: '/admin/add-news' },
-    { name: 'সকল ইউজার', path: '/all-users' },
+ 
+    { name: 'পাতা যুক্ত করুন', path: '/admin/upload-page' },
 
   ];
 

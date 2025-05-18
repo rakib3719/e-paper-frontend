@@ -141,7 +141,7 @@ const HeaderContent = () => {
             </div>
 
             <div>
-              <Image alt='logo' src={logo} height={200} width={200} />
+              <Image alt='logo' src={logo} height={200} width={200} className='' />
             </div>
           </div>
 

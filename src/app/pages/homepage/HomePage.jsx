@@ -2,7 +2,7 @@
 
 import useGetNews from '@/hooks/useGetNews';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineShowChart } from 'react-icons/md';
 import { LuPrinter } from "react-icons/lu";
 import { FaDownload, FaFacebook, FaTwitter } from 'react-icons/fa';
@@ -86,6 +86,11 @@ if(category){
      const [modalIsOpen, setModalIsOpen] = useState(false);
 
 
+
+     useEffect(()=>{
+
+      setSelectedImage(null)
+     },[useGetNews, data])
 if(loading){
   return <p>Loading...</p>
 }
@@ -179,7 +184,7 @@ if(!data){
     <div className="flex flex-col lg:flex-row">
 
   
-      <div className=" flex-1 mx-auto">
+      <div className=" w-[46%] ">
         <div className='bg-[#f7dfb9] w-full p-2 mb-8'>
    <div className='w-full  flex gap-3'>
 
@@ -210,7 +215,7 @@ if(!data){
 </div>
             </div>
         {newsImages?.length > 0 ? (
-          <div className="columns-1 md:px-6 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          <div className="columns-1 md:px-6 sm:columns-2 md:columns-3 lg:columns-3 gap-4 space-y-4">
             
             {newsImages.map((item, idx) => (
               <div
@@ -252,7 +257,7 @@ if(!data){
         )}
       </div>
 
-<div className='max-h-screen overflow-auto'>
+<div className=' overflow-scroll  '>
 
 
 
@@ -305,26 +310,26 @@ if(!data){
 
 
 
-        <div className="flex-1 hidden  p-6 md:flex justify-center items-center ">
+        <div className="w-full hidden  p-6 md:flex justify-center items-center ">
 
 
 
 
        {selectedImage ? (
-  <Image
+  <img
     src={selectedImage}
     alt="Selected"
-    width={600}
-    height={600}
-    className="object-contain w-full h-full"
+    width={1000}
+    height={1000}
+    className="object-contain "
   />
 ) : defaultImage ? (
   <Image
     src={defaultImage}
     alt="Default Selected"
-    width={600}
-    height={600}
-    className="object-contain w-full h-full"
+    width={1000}
+    height={1000}
+    className="object-contain "
   />
 ) : (
   <p className="text-gray-500">No image available</p>
